@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOGO_FILE="./gear_logo"
+LOGO_FILE="/logo/${1}_logo"
 
 MSG_LINES=(
 ""
@@ -39,11 +39,13 @@ HASKELL=`ghc --version|awk '{print $8}'`
 tput init
 IFS="|"
 
-BL="$(tput setaf 24)"
-OR="$(tput setaf 172)"
+BL="$(tput setaf 4)"
+DBL="$(tput setaf 33)"
+SBL="$(tput setaf 12)"
+OR="$(tput setaf 214)"
 RE="$(tput setaf 7)"
-DB="$(tput setaf 160)"
-PI="$(tput setaf 190)"
+DOR="$(tput setaf 196)"
+SOR="$(tput setaf 226)"
 
 tput bold;
 
@@ -76,5 +78,6 @@ do
 	let i+=1
 done < $LOGO_FILE
 
+echo
 tput sgr0
 
