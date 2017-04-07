@@ -1,6 +1,26 @@
 #!/bin/bash
 
-IFS="|"
+LOGO_FILE="./gear_logo"
+
+MSG_LINES=(
+""
+""
+""
+"Developer"
+"Email"
+"Date"
+""
+"OS"
+"Kernel"
+"Host"
+"User"
+""
+"CC"
+"Boost"
+"Lua"
+"Haskell"
+)
+
 
 DEVELOPER='Lentil Sun'
 EMAIL="t_sunyk@channelsoft.com"
@@ -14,58 +34,47 @@ USER=`whoami`
 CC=`g++ --version|grep g++|awk '{print $2,$3}'`
 BOOST=`cat /usr/include/boost/version.hpp|grep '#define'|grep LIB_VERSION|awk '{print $3}'|sed 's/\"//g'|sed 's/\_/./g'`
 LUA=`lua -v 2>&1|awk '{print $2}'`
-HASK=`ghc --version|awk '{print $8}'`
+HASKELL=`ghc --version|awk '{print $8}'`
 
 tput init
+IFS="|"
 
-BL="$(tput setaf 25)"
-OR="$(tput setaf 214)"
+BL="$(tput setaf 24)"
+OR="$(tput setaf 172)"
 RE="$(tput setaf 7)"
+DB="$(tput setaf 160)"
+PI="$(tput setaf 190)"
 
 tput bold;
 
 function vecho()
 {
-	
 	RE="$(tput setaf 7)"
 	YE="$(tput setaf 11)"
 	GR="$(tput setaf 250)"
-	if [ -n $2 ] ;
+		
+	if [ -n "$1" ] ;
 	then
-		echo ${YE}$1: ${GR}$2${RE}
+		eval value=\$"$(echo $1|tr '[:lower:]' '[:upper:]')"
+		if [ -n "$value" ] ;
+		then
+			echo ${YE}$1: ${GR}$value${RE}
+		else
+			echo ${RED}$1: ${GR}Not found${RE}
+		fi
 	else
-		echo ${RED}$1: ${GR}Not found${RE}
+		echo
 	fi
 }
 
+i=0
 echo
-echo "                    ${OR}.=Ds(${RE}                            "
-echo "                   ${OR}'NNNNNNB-${RE}                         "
-echo "        ${BL}~<<-${RE}       ${OR}.NNNNNNNNz${RE}         ${OR}-~.${RE}         "
-echo "      ${BL}(NNNNNNN+${RE}     ${OR}~NNNNNNNNs${RE}      ${OR}-NNNNN+${RE}       " `vecho Developer $DEVELOPER`
-echo "      ${BL}hNNNNNNNNN=${RE}    ${OR}'NNNNNNNN'${RE}     ${OR}'NNNNNND.${RE}     " `vecho E-mail $EMAIL`
-echo "      ${BL}=NNNNNNNNNNB.${RE}    ${OR}'hNNNN+${BL}'(-.${RE}   ${OR}'NNNNNNh${RE}     " `vecho Date $DATE`
-echo "       ${BL}DNNNNNNNNNNB.${RE}        ${BL}'NNNNNN+${RE}   ${OR}(NNNN=${RE}     " 
-echo "        ${BL}hNNNNNNNNNN(${RE}        ${BL}~NNNNNNNN~${RE}            " `vecho OS $OS`
-echo "         ${BL}'BNNNNNNNN~${RE}         ${BL}hNNNNNNNN(${RE}           " `vecho Kernel $KERNEL`
-echo "            ${BL}(DNNNN- ${OR}~(<-${RE}      ${BL}=NNNNNNNB.${RE}          " `vecho Host $HOST`
-echo "                  ${OR}=NNNNNNN<${RE}    ${BL}.sNNNNNs${RE}           " `vecho User $USER`
-echo "                 ${OR}.BNNNNNNNNN(${RE}     ${BL}.~~${OR}'hNNNN=.${RE}     "
-echo "                  ${OR}zNNNNNNNNNNz${RE}       ${OR}(NNNNNNNh.${RE}   " `vecho CC $CC`
-echo "                  ${OR}.BNNNNNNNNNNh${RE}      ${OR}.BNNNNNNNN'${RE}  " `vecho Boost $BOOST`
-echo "                    ${OR}hNNNNNNNNNN~${RE}      ${OR}.BNNNNNNNz${RE}  " `vecho Lua $LUA`
-echo "    ${BL}-=hh=(.${RE}          ${OR}-NNNNNNNNN-${RE}        ${OR}<NNNNNNh${RE}  " `vecho Haskell $HASK`
-echo "  ${BL}'NNNNNNNNNh-${RE}         ${OR}.<DNNND'${BL}.((('${RE}      ${OR}.<zs(${RE}   "
-echo "  ${BL}zNNNNNNNNNNNN-${RE}              ${BL}zNNNNNNN(${RE}           "
-echo "  ${BL}hNNNNNNNNNNNNND.${RE}           ${BL}-NNNNNNNNNN-${RE}         "
-echo "  ${BL}(NNNNNNNNNNNNNNN'${RE}          ${BL}.BNNNNNNNNNNz${RE}        "
-echo "   ${BL}=NNNNNNNNNNNNNNN.${RE}          ${BL}'NNNNNNNNNNNs${RE}       "
-echo "    ${BL}=NNNNNNNNNNNNNNz${RE}           ${BL}.BNNNNNNNNNN'${RE}      "
-echo "     ${BL}-NNNNNNNNNNNNNB.${RE}            ${BL}(NNNNNNNNN'${RE}      "
-echo "       ${BL}(NNNNNNNNNNNs${RE}               ${BL}.=BNNND'${RE}       "
-echo "         ${BL}.+NNNNNNN<${RE}                               "
-echo "            ${BL}-=+=>.${RE}                               "
-echo
+while read line
+do
+	eval echo -n $line
+	vecho ${MSG_LINES[$i]}
+	let i+=1
+done < $LOGO_FILE
 
 tput sgr0
 
